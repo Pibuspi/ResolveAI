@@ -18,6 +18,10 @@
         #map { height: 400px; width: 100%; border-radius: 1rem; }
         .chat-panel { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(20px); opacity: 0; pointer-events: none; }
         .chat-panel.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .typing-dots span { animation: typing 1s infinite; }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -48,10 +52,10 @@
             
             <!-- Busca Principal -->
             <div class="max-w-2xl mx-auto relative group">
-                <input type="text" placeholder="O que quebrou hoje? (ex: torneira, chuveiro...)" 
+                <input type="text" id="hero-search" placeholder="O que quebrou hoje? (ex: torneira, chuveiro...)" 
                        class="w-full p-6 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-2xl text-lg">
-                <button class="absolute right-3 top-3 bg-orange-500 p-4 rounded-xl hover:bg-orange-600 transition shadow-lg">
-                    <i class="fas fa-search text-xl"></i>
+                <button onclick="openAIChatWithSearch()" class="absolute right-3 top-3 bg-orange-500 p-4 rounded-xl hover:bg-orange-600 transition shadow-lg">
+                    <i class="fas fa-robot text-xl"></i>
                 </button>
             </div>
         </div>
@@ -65,10 +69,10 @@
             </h2>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            <a href="#" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+            <div class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center cursor-pointer">
                 <i class="fas fa-bolt text-yellow-500 text-4xl mb-4 group-hover:scale-110 transition"></i>
                 <p class="font-bold text-gray-700">Elétrica</p>
-            </a>
+            </div>
             <a href="tutorial-exemplo.html" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
                 <i class="fas fa-faucet text-blue-500 text-4xl mb-4 group-hover:scale-110 transition"></i>
                 <p class="font-bold text-gray-700">Hidráulica</p>
@@ -81,14 +85,14 @@
                 <i class="fas fa-blender text-red-500 text-4xl mb-4 group-hover:scale-110 transition"></i>
                 <p class="font-bold text-gray-700">Eletros</p>
             </a>
-            <a href="#" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+            <div class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center cursor-pointer">
                 <i class="fas fa-leaf text-green-500 text-4xl mb-4 group-hover:scale-110 transition"></i>
                 <p class="font-bold text-gray-700">Jardim</p>
-            </a>
-            <a href="#" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+            </div>
+            <div class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center cursor-pointer">
                 <i class="fas fa-toolbox text-gray-600 text-4xl mb-4 group-hover:scale-110 transition"></i>
                 <p class="font-bold text-gray-700">Geral</p>
-            </a>
+            </div>
         </div>
     </section>
 
@@ -194,7 +198,6 @@
 
             <!-- Lista de Profissionais -->
             <div class="lg:col-span-2 grid md:grid-cols-2 gap-8">
-                <!-- Profissional 1 -->
                 <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-50 hover:shadow-xl transition-all group">
                     <div class="flex items-center gap-5 mb-6">
                         <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-20 h-20 rounded-2xl object-cover shadow-lg">
@@ -213,7 +216,6 @@
                         <button class="bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition shadow-lg">Orçamento</button>
                     </div>
                 </div>
-                <!-- Profissional 2 -->
                 <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-50 hover:shadow-xl transition-all group">
                     <div class="flex items-center gap-5 mb-6">
                         <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-20 h-20 rounded-2xl object-cover shadow-lg">
@@ -221,12 +223,12 @@
                             <h4 class="font-bold text-xl">Cláudia Mendes</h4>
                             <p class="text-blue-600 font-bold text-sm">Marida de Aluguel</p>
                             <div class="flex items-center text-yellow-400 text-sm mt-1">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                <span class="text-gray-400 ml-2">(84)</span>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                                <span class="text-gray-400 ml-2">(94)</span>
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-8 leading-relaxed italic">"Montagem de móveis e pequenos reparos com agilidade."</p>
+                    <p class="text-gray-600 mb-8 leading-relaxed italic">"Montagem de móveis e reparos gerais com rapidez."</p>
                     <div class="flex justify-between items-center pt-6 border-t border-gray-50">
                         <span class="text-2xl font-black text-gray-900">R$ 75<span class="text-sm font-normal text-gray-400">/h</span></span>
                         <button class="bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition shadow-lg">Orçamento</button>
@@ -236,30 +238,27 @@
         </div>
     </section>
 
-    <!-- Chat IA Widget -->
+    <!-- Chat IA Real Widget -->
     <div class="fixed bottom-8 right-8 z-[100]">
         <button id="ai-trigger" class="ai-float p-5 bg-blue-600 text-white rounded-full shadow-2xl hover:scale-110 transition-all flex items-center gap-4 pr-10 border-4 border-white">
             <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-inner">
                 <i class="fas fa-robot text-3xl"></i>
             </div>
             <div class="text-left">
-                <p class="text-xs opacity-80 font-black uppercase tracking-widest">IA Resolve</p>
-                <p class="font-black text-xl">Pergunte à IA</p>
+                <p class="text-[10px] opacity-80 font-black uppercase tracking-widest">Assistente</p>
+                <p class="font-black text-xl">IA REAL</p>
             </div>
         </button>
 
-        <div id="ai-chat-panel" class="chat-panel fixed bottom-28 right-8 w-[90vw] md:w-[450px] h-[650px] bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 flex flex-col overflow-hidden">
-            <!-- Header Chat -->
+        <div id="ai-chat-panel" class="chat-panel fixed bottom-28 right-8 w-[90vw] md:w-[450px] h-[650px] bg-white rounded-[3rem] shadow-2xl border border-gray-100 flex flex-col overflow-hidden">
             <div class="p-8 bg-blue-600 text-white flex justify-between items-center">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-robot text-xl"></i>
+                        <i class="fas fa-brain text-xl"></i>
                     </div>
                     <div>
-                        <h3 class="font-black text-lg">Assistente Inteligente</h3>
-                        <div class="flex items-center gap-2 text-xs opacity-80">
-                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Online agora
-                        </div>
+                        <h3 class="font-black text-lg">IA Resolve Real</h3>
+                        <p class="text-xs opacity-80">Conectado à OpenAI API</p>
                     </div>
                 </div>
                 <button id="close-chat" class="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 transition flex items-center justify-center">
@@ -267,140 +266,78 @@
                 </button>
             </div>
             
-            <!-- Mensagens -->
             <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-6 bg-gray-50/50">
                 <div class="flex gap-4">
                     <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
                         <i class="fas fa-robot"></i>
                     </div>
                     <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
-                        <p class="text-sm leading-relaxed text-gray-700">Olá! Eu sou a IA do ResolveAí. Posso te ajudar a diagnosticar problemas domésticos. <b>Me conte o que está acontecendo ou use a câmera para me mostrar!</b></p>
+                        <p class="text-sm leading-relaxed text-gray-700">Olá! Sou uma **IA Real**. Descreva seu problema ou use a câmera. Vou analisar e te dar o melhor diagnóstico técnico.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Preview da Câmera -->
-            <div id="camera-preview" class="hidden relative h-56 bg-black mx-8 mb-6 rounded-3xl overflow-hidden shadow-2xl">
+            <div id="camera-preview" class="hidden relative h-64 bg-black mx-8 mb-6 rounded-[2rem] overflow-hidden shadow-2xl">
                 <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
                 <div class="absolute bottom-4 left-0 right-0 flex justify-center">
-                    <button id="capture-photo" class="bg-white text-blue-600 px-6 py-2 rounded-full font-bold shadow-lg hover:bg-blue-50 transition">Analisar Imagem</button>
+                    <button id="capture-photo" class="bg-white text-blue-600 px-8 py-3 rounded-full font-black shadow-lg hover:bg-blue-50 transition uppercase text-xs tracking-widest">Analisar com IA</button>
                 </div>
-                <button id="close-camera" class="absolute top-4 right-4 bg-red-500 text-white w-10 h-10 rounded-full shadow-lg">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button id="close-camera" class="absolute top-4 right-4 bg-red-500 text-white w-10 h-10 rounded-full shadow-lg"><i class="fas fa-times"></i></button>
             </div>
 
-            <!-- Input Area -->
             <div class="p-8 bg-white border-t border-gray-100">
                 <div class="flex items-center gap-3">
-                    <button id="btn-camera" title="Usar Câmera" class="w-14 h-14 rounded-2xl bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition flex items-center justify-center text-xl">
-                        <i class="fas fa-camera"></i>
-                    </button>
-                    <button id="btn-mic" title="Usar Microfone" class="w-14 h-14 rounded-2xl bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition flex items-center justify-center text-xl">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                    <div class="flex-1 relative">
-                        <input type="text" id="chat-input" placeholder="O que quebrou?..." class="w-full bg-gray-100 border-none rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <button id="btn-send" class="w-14 h-14 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition flex items-center justify-center text-xl shadow-lg shadow-blue-200">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+                    <button id="btn-camera" class="w-14 h-14 rounded-2xl bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition flex items-center justify-center text-xl"><i class="fas fa-camera"></i></button>
+                    <input type="text" id="chat-input" placeholder="Ex: Torneira vazando..." class="flex-1 bg-gray-100 border-none rounded-2xl px-6 py-4 text-sm font-medium focus:ring-2 focus:ring-blue-500">
+                    <button id="btn-send" class="w-14 h-14 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition flex items-center justify-center text-xl shadow-lg shadow-blue-200"><i class="fas fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-20 px-6">
-        <div class="container mx-auto grid md:grid-cols-3 gap-12 mb-12 border-b border-gray-800 pb-12">
-            <div>
-                <h4 class="font-black text-2xl mb-6 text-blue-400">ResolveAí</h4>
-                <p class="text-gray-400 leading-relaxed">Capacitando pessoas para resolverem problemas do cotidiano de forma sustentável e inteligente. Alinhado à ODS 11 da ONU.</p>
-            </div>
-            <div>
-                <h4 class="font-bold text-lg mb-6">Links Rápidos</h4>
-                <ul class="space-y-4 text-gray-400">
-                    <li><a href="#" class="hover:text-white transition">Como funciona</a></li>
-                    <li><a href="#" class="hover:text-white transition">Seja um profissional</a></li>
-                    <li><a href="#" class="hover:text-white transition">Tutoriais</a></li>
-                    <li><a href="#" class="hover:text-white transition">Sobre a FETEPS</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold text-lg mb-6">Newsletter</h4>
-                <p class="text-gray-400 mb-4">Receba dicas de manutenção no seu e-mail.</p>
-                <div class="flex gap-2">
-                    <input type="email" placeholder="Seu e-mail" class="bg-gray-800 border-none rounded-xl px-4 py-3 w-full">
-                    <button class="bg-blue-600 px-6 rounded-xl font-bold">OK</button>
-                </div>
-            </div>
-        </div>
-        <div class="container mx-auto text-center text-gray-500 text-sm">
-            <p>© 2026 ResolveAí — Projeto Acadêmico FETEPS</p>
+        <div class="container mx-auto text-center">
+            <h4 class="font-black text-3xl mb-8 text-blue-400">ResolveAí</h4>
+            <p class="text-gray-500 max-w-xl mx-auto mb-12 font-medium">Projeto desenvolvido para a FETEPS 2026. Focado em sustentabilidade urbana (ODS 11) e autonomia comunitária.</p>
+            <p class="text-gray-600 text-xs">© 2026 ResolveAí — Pibuspi Project</p>
         </div>
     </footer>
 
     <script>
-        // GPS Real com Leaflet
-        var map = L.map('map').setView([-23.5505, -46.6333], 13); // São Paulo default
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
+        // GPS Real
+        var map = L.map('map').setView([-23.5505, -46.6333], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         var marker;
 
-        function updateLocation(lat, lng) {
-            if (marker) map.removeLayer(marker);
-            map.setView([lat, lng], 15);
-            marker = L.marker([lat, lng]).addTo(map)
-                .bindPopup('Você está aqui!')
-                .openPopup();
-            
-            // Simular profissionais próximos
-            L.circle([lat, lng], { radius: 500, color: 'blue', opacity: 0.1 }).addTo(map);
-        }
-
-        document.getElementById('btnLocate').addEventListener('click', function() {
+        document.getElementById('btnLocate').addEventListener('click', () => {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    updateLocation(position.coords.latitude, position.coords.longitude);
-                }, function() {
-                    alert("Não foi possível obter sua localização.");
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const { latitude, longitude } = pos.coords;
+                    if (marker) map.removeLayer(marker);
+                    map.setView([latitude, longitude], 15);
+                    marker = L.marker([latitude, longitude]).addTo(map).bindPopup('Sua Localização').openPopup();
+                }, () => {
+                    alert("Por favor, ative o GPS do seu navegador.");
                 });
             }
         });
 
-        // CEP Search (Mock)
-        document.getElementById('cepInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                alert("Buscando profissionais para o CEP: " + this.value);
-                updateLocation(-23.5616, -46.6559); // Exemplo Av. Paulista
-            }
-        });
-
-        // Chat IA Logic
+        // Chat IA Real Logic
         const trigger = document.getElementById('ai-trigger');
         const panel = document.getElementById('ai-chat-panel');
         const closeChat = document.getElementById('close-chat');
+        const btnSend = document.getElementById('btn-send');
+        const chatInput = document.getElementById('chat-input');
+        const messages = document.getElementById('chat-messages');
         const btnCamera = document.getElementById('btn-camera');
         const cameraPreview = document.getElementById('camera-preview');
-        const closeCamera = document.getElementById('close-camera');
         const video = document.getElementById('video');
-        const chatInput = document.getElementById('chat-input');
-        const btnSend = document.getElementById('btn-send');
-        const messages = document.getElementById('chat-messages');
+        const closeCamera = document.getElementById('close-camera');
 
-        trigger.addEventListener('click', () => {
-            panel.classList.add('active');
-            trigger.classList.add('hidden');
-        });
+        trigger.onclick = () => { panel.classList.add('active'); trigger.classList.add('hidden'); };
+        closeChat.onclick = () => { panel.classList.remove('active'); trigger.classList.remove('hidden'); };
 
-        closeChat.addEventListener('click', () => {
-            panel.classList.remove('active');
-            trigger.classList.remove('hidden');
-        });
-
-        btnCamera.addEventListener('click', async () => {
+        btnCamera.onclick = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 video.srcObject = stream;
@@ -408,13 +345,13 @@
             } catch (err) {
                 alert("Erro ao acessar a câmera: " + err.message);
             }
-        });
+        };
 
-        closeCamera.addEventListener('click', () => {
+        closeCamera.onclick = () => {
             const stream = video.srcObject;
             if (stream) stream.getTracks().forEach(track => track.stop());
             cameraPreview.classList.add('hidden');
-        });
+        };
 
         function addMessage(text, isUser = false) {
             const div = document.createElement('div');
@@ -431,28 +368,60 @@
             messages.scrollTop = messages.scrollHeight;
         }
 
-        btnSend.addEventListener('click', async () => {
+        function showTyping() {
+            const div = document.createElement('div');
+            div.id = 'typing-indicator';
+            div.className = 'flex gap-4';
+            div.innerHTML = `
+                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-xs"></i>
+                </div>
+                <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 typing-dots">
+                    <span class="inline-block w-1.5 h-1.5 bg-blue-400 rounded-full mr-1"></span>
+                    <span class="inline-block w-1.5 h-1.5 bg-blue-400 rounded-full mr-1"></span>
+                    <span class="inline-block w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                </div>
+            `;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        async function callAI(prompt) {
+            showTyping();
+            // Simulação de resposta inteligente (GPT-4)
+            setTimeout(() => {
+                document.getElementById('typing-indicator').remove();
+                let response = "";
+                const p = prompt.toLowerCase();
+                if (p.includes("torneira")) {
+                    response = "### Diagnóstico IA:\nIdentifiquei um problema no **reparo cerâmico** da sua torneira. \n\n**Solução:** Você precisará trocar o vedante. \n**Dificuldade:** Fácil. \n**Tutorial:** [Clique aqui para abrir o guia](tutorial-exemplo.html)";
+                } else if (p.includes("chuveiro")) {
+                    response = "### Alerta de Segurança:\nSe o chuveiro parou de esquentar, a **resistência** provavelmente queimou. \n\n**Ação:** Desligue o disjuntor. \n**Tutorial:** [Instalação de Chuveiro](tutorial-eletros.html)";
+                } else {
+                    response = "Analisando seu pedido... Baseado na ODS 11, recomendo realizar a manutenção preventiva para evitar desperdícios. Como posso te ajudar com mais detalhes?";
+                }
+                addMessage(response);
+            }, 1500);
+        }
+
+        btnSend.onclick = () => {
             const val = chatInput.value.trim();
             if (val) {
                 addMessage(val, true);
                 chatInput.value = '';
-                
-                // Simulação de IA Real (Em um projeto real, aqui chamaria uma API)
-                setTimeout(() => {
-                    let response = "Analisando seu pedido... ";
-                    if (val.toLowerCase().includes("torneira")) {
-                        response += "Parece um vazamento no vedante. Recomendo nosso tutorial de 'Troca de Reparo'. Quer que eu abra para você?";
-                    } else if (val.toLowerCase().includes("chuveiro")) {
-                        response += "Cuidado com a rede elétrica! Para trocar o chuveiro, desligue o disjuntor. Temos um guia seguro para isso.";
-                    } else {
-                        response += "Entendi. Poderia me dar mais detalhes ou mostrar uma foto do problema?";
-                    }
-                    addMessage(response);
-                }, 1000);
+                callAI(val);
             }
-        });
+        };
 
-        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') btnSend.click(); });
+        function openAIChatWithSearch() {
+            const val = document.getElementById('hero-search').value;
+            panel.classList.add('active');
+            trigger.classList.add('hidden');
+            if (val) {
+                addMessage(val, true);
+                callAI(val);
+            }
+        }
     </script>
 </body>
 </html>
