@@ -6,346 +6,453 @@
     <title>ResolveAí — Aprenda e conserte sua casa hoje</title>
     <meta name="description" content="Aprenda consertos domésticos DIY ou encontre maridos de aluguel qualificados. Autonomia para o seu dia a dia.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="" crossorigin="">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="" crossorigin=""></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+        .ai-float { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        #map { height: 400px; width: 100%; border-radius: 1rem; }
+        .chat-panel { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(20px); opacity: 0; pointer-events: none; }
+        .chat-panel.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-gray-50 text-gray-900">
 
     <!-- Header / Nav -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold text-blue-600 flex items-center gap-2">
-                <i class="fas fa-tools"></i> ResolveAí
+    <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-extrabold text-blue-600 flex items-center gap-2">
+                <i class="fas fa-screwdriver-wrench"></i> ResolveAí
             </a>
-            <div class="hidden md:flex space-x-6">
-                <a href="#categorias" class="hover:text-blue-600">Categorias</a>
-                <a href="#profissionais" class="hover:text-blue-600 font-semibold">Encontrar Profissional</a>
+            <div class="hidden md:flex space-x-8 font-semibold text-gray-600">
+                <a href="#categorias" class="hover:text-blue-600 transition">Categorias</a>
+                <a href="#profissionais" class="hover:text-blue-600 transition">Profissionais</a>
+                <a href="#tutoriais" class="hover:text-blue-600 transition">Tutoriais</a>
             </div>
-            <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Entrar</a>
+            <div class="flex items-center gap-4">
+                <span class="hidden lg:inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wider">Projeto FETEPS</span>
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition shadow-md shadow-blue-200">Entrar</button>
+            </div>
         </nav>
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-blue-600 text-white py-16 px-4">
-        <div class="container mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6">Você consegue resolver.</h1>
-            <p class="text-xl mb-8 opacity-90">Tutoriais simples para o dia a dia. Se complicar, a gente chama ajuda.</p>
+    <section class="hero-gradient text-white py-20 px-6">
+        <div class="container mx-auto text-center max-w-4xl">
+            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">Você consegue resolver.</h1>
+            <p class="text-xl md:text-2xl mb-12 opacity-90 font-medium">Tutoriais simples para o seu dia a dia. Se complicar, a gente chama ajuda profissional.</p>
             
             <!-- Busca Principal -->
-            <div class="max-w-2xl mx-auto relative">
+            <div class="max-w-2xl mx-auto relative group">
                 <input type="text" placeholder="O que quebrou hoje? (ex: torneira, chuveiro...)" 
-                       class="w-full p-4 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                <button class="absolute right-2 top-2 bg-orange-500 p-2 px-6 rounded-full hover:bg-orange-600 transition">
-                    <i class="fas fa-search"></i>
+                       class="w-full p-6 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-2xl text-lg">
+                <button class="absolute right-3 top-3 bg-orange-500 p-4 rounded-xl hover:bg-orange-600 transition shadow-lg">
+                    <i class="fas fa-search text-xl"></i>
                 </button>
             </div>
         </div>
     </section>
 
     <!-- Categorias -->
-    <section id="categorias" class="container mx-auto py-12 px-4">
-        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2">
-            <span class="bg-blue-100 text-blue-600 p-2 rounded">🏠</span> Comece por categoria
-        </h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 text-center">
-            <a href="#" class="p-6 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 transition">
-                <i class="fas fa-bolt text-yellow-500 text-3xl mb-3"></i>
-                <p class="font-medium">Elétrica</p>
+    <section id="categorias" class="container mx-auto py-20 px-6">
+        <div class="flex items-center justify-between mb-12">
+            <h2 class="text-3xl font-bold flex items-center gap-3">
+                <span class="bg-blue-600 text-white p-2 rounded-lg text-sm"><i class="fas fa-list"></i></span> Comece por categoria
+            </h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <a href="#" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+                <i class="fas fa-bolt text-yellow-500 text-4xl mb-4 group-hover:scale-110 transition"></i>
+                <p class="font-bold text-gray-700">Elétrica</p>
             </a>
-            <a href="#" class="p-6 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 transition">
-                <i class="fas fa-faucet text-blue-500 text-3xl mb-3"></i>
-                <p class="font-medium">Hidráulica</p>
+            <a href="tutorial-exemplo.html" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+                <i class="fas fa-faucet text-blue-500 text-4xl mb-4 group-hover:scale-110 transition"></i>
+                <p class="font-bold text-gray-700">Hidráulica</p>
             </a>
-            <a href="#" class="p-6 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 transition">
-                <i class="fas fa-hammer text-orange-700 text-3xl mb-3"></i>
-                <p class="font-medium">Marcenaria</p>
+            <a href="tutorial-marcenaria.html" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+                <i class="fas fa-hammer text-orange-700 text-4xl mb-4 group-hover:scale-110 transition"></i>
+                <p class="font-bold text-gray-700">Marcenaria</p>
             </a>
-            <a href="#" class="p-6 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 transition">
-                <i class="fas fa-blender text-red-500 text-3xl mb-3"></i>
-                <p class="font-medium">Eletros</p>
+            <a href="tutorial-eletros.html" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+                <i class="fas fa-blender text-red-500 text-4xl mb-4 group-hover:scale-110 transition"></i>
+                <p class="font-bold text-gray-700">Eletros</p>
             </a>
-            <a href="#" class="p-6 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 transition">
-                <i class="fas fa-leaf text-green-500 text-3xl mb-3"></i>
-                <p class="font-medium">Jardim</p>
+            <a href="#" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+                <i class="fas fa-leaf text-green-500 text-4xl mb-4 group-hover:scale-110 transition"></i>
+                <p class="font-bold text-gray-700">Jardim</p>
             </a>
-            <a href="#" class="p-6 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 transition">
-                <i class="fas fa-toolbox text-gray-600 text-3xl mb-3"></i>
-                <p class="font-medium">Manutenção</p>
+            <a href="#" class="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all text-center">
+                <i class="fas fa-toolbox text-gray-600 text-4xl mb-4 group-hover:scale-110 transition"></i>
+                <p class="font-bold text-gray-700">Geral</p>
             </a>
         </div>
     </section>
 
-    <!-- Destaques (Tutoriais) -->
-    <section class="bg-gray-100 py-12 px-4">
+    <!-- Tutoriais Populares -->
+    <section id="tutoriais" class="bg-gray-100 py-20 px-6">
         <div class="container mx-auto">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold">Tutoriais Populares</h2>
-                <a href="#" class="text-blue-600 font-semibold hover:underline">Ver todos</a>
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Tutoriais em Vídeo</h2>
+                    <p class="text-gray-600">Aprenda visualmente com os melhores guias.</p>
+                </div>
+                <a href="#" class="text-blue-600 font-bold hover:underline">Ver biblioteca completa</a>
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Card Tutorial 1 -->
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
-                    <div class="h-48 bg-gray-300 relative">
-                        <img src="https://images.unsplash.com" alt="Conserto de Torneira" class="w-full h-full object-cover">
-                        <span class="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">FÁCIL</span>
+                <!-- Tutorial 1 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition group">
+                    <div class="h-52 bg-gray-900 relative">
+                        <img src="https://images.unsplash.com/photo-1585338107529-13c91f4852e7?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition">
+                                <i class="fas fa-play text-white text-2xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute top-4 left-4 bg-green-500 text-white text-xs font-black px-3 py-1 rounded-full">FÁCIL</span>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2 text-gray-900">Como trocar o reparo da torneira pingando</h3>
-                        <div class="flex items-center text-sm text-gray-500 gap-4 mb-4">
+                    <div class="p-8">
+                        <h3 class="font-bold text-xl mb-4 text-gray-900 leading-tight">Como trocar o reparo da torneira pingando</h3>
+                        <div class="flex items-center text-sm text-gray-500 gap-4 mb-6">
                             <span><i class="far fa-clock mr-1"></i> 20 min</span>
                             <span><i class="fas fa-star text-yellow-400 mr-1"></i> 4.9</span>
                         </div>
-                        <a href="tutorial-exemplo.html" class="block text-center bg-gray-900 text-white py-3 rounded-lg font-bold hover:bg-black transition">Começar passo a passo</a>
+                        <a href="tutorial-exemplo.html" class="block text-center bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-100">Ver Passo a Passo</a>
                     </div>
                 </div>
 
-                <!-- Card Tutorial 2 (Placeholder) -->
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-                    <div class="h-48 bg-gray-300 relative">
-                        <img src="https://images.unsplash.com" alt="Instalar Chuveiro" class="w-full h-full object-cover">
-                        <span class="absolute top-4 left-4 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded">MÉDIO</span>
+                <!-- Tutorial 2 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition group">
+                    <div class="h-52 bg-gray-900 relative">
+                        <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition">
+                                <i class="fas fa-play text-white text-2xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute top-4 left-4 bg-orange-500 text-white text-xs font-black px-3 py-1 rounded-full">MÉDIO</span>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2 text-gray-900">Instalação de Chuveiro Elétrico com segurança</h3>
-                        <div class="flex items-center text-sm text-gray-500 gap-4 mb-4">
+                    <div class="p-8">
+                        <h3 class="font-bold text-xl mb-4 text-gray-900 leading-tight">Instalação de Chuveiro Elétrico com segurança</h3>
+                        <div class="flex items-center text-sm text-gray-500 gap-4 mb-6">
                             <span><i class="far fa-clock mr-1"></i> 45 min</span>
                             <span><i class="fas fa-star text-yellow-400 mr-1"></i> 4.8</span>
                         </div>
-                        <a href="#" class="block text-center border-2 border-gray-900 py-3 rounded-lg font-bold hover:bg-gray-50 transition">Ver tutorial</a>
+                        <a href="tutorial-eletros.html" class="block text-center bg-gray-900 text-white py-4 rounded-2xl font-bold hover:bg-black transition shadow-lg shadow-gray-100">Ver Passo a Passo</a>
                     </div>
                 </div>
 
-                <!-- Call to Action Marketplace -->
-                <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-8 flex flex-col justify-center items-center text-center">
-                    <div class="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl mb-4">
-                        <i class="fas fa-user-tie"></i>
+                <!-- Tutorial 3 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition group">
+                    <div class="h-52 bg-gray-900 relative">
+                        <img src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition">
+                                <i class="fas fa-play text-white text-2xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute top-4 left-4 bg-blue-500 text-white text-xs font-black px-3 py-1 rounded-full">AVANÇADO</span>
                     </div>
-                    <h3 class="font-bold text-xl mb-2 italic">"Não deu certo?"</h3>
-                    <p class="text-gray-600 mb-6">Algumas coisas precisam de um profissional. Encontre um "Marido de Aluguel" verificado perto de você.</p>
-                    <a href="#profissionais" class="bg-orange-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-orange-600 transition">Encontrar Profissional</a>
+                    <div class="p-8">
+                        <h3 class="font-bold text-xl mb-4 text-gray-900 leading-tight">Montagem de Prateleiras em Parede de Drywall</h3>
+                        <div class="flex items-center text-sm text-gray-500 gap-4 mb-6">
+                            <span><i class="far fa-clock mr-1"></i> 60 min</span>
+                            <span><i class="fas fa-star text-yellow-400 mr-1"></i> 5.0</span>
+                        </div>
+                        <a href="tutorial-marcenaria.html" class="block text-center border-2 border-gray-900 py-4 rounded-2xl font-bold hover:bg-gray-50 transition">Ver Passo a Passo</a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Marketplace / Profissionais -->
-    <section id="profissionais" class="container mx-auto py-16 px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold mb-4">Encontre um Especialista Verificado</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Não tem as ferramentas ou prefere não arriscar? Nossos "Maridos de Aluguel" e profissionais parceiros estão prontos para ajudar.</p>
+    <!-- Profissionais & GPS -->
+    <section id="profissionais" class="container mx-auto py-24 px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-black mb-4">Encontre um Especialista Verificado</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto text-lg">Se o problema for complexo, não arrisque. Nossos parceiros estão prontos para ajudar agora mesmo.</p>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Filtros e Mapa -->
-            <div class="lg:w-1/3 space-y-6">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 class="font-bold mb-4">Filtrar por</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Localização</label>
-                            <div class="flex gap-2">
-                                <input id="cepInput" type="text" placeholder="Seu CEP" class="w-full p-2 border rounded-lg text-sm">
-                                <button id="btnLocate" class="bg-blue-600 text-white p-2 rounded-lg"><i class="fas fa-location-arrow"></i></button>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Categoria</label>
-                            <select class="w-full p-2 border rounded-lg text-sm">
-                                <option>Todas</option>
-                                <option>Elétrica</option>
-                                <option>Hidráulica</option>
-                                <option>Montagem de Móveis</option>
-                            </select>
-                        </div>
+        <div class="grid lg:grid-cols-3 gap-12 items-start">
+            <!-- Coluna Mapa -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+                    <h3 class="font-bold text-xl mb-6">Sua Localização</h3>
+                    <div class="flex gap-3 mb-6">
+                        <input id="cepInput" type="text" placeholder="Digite seu CEP" class="flex-1 p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500">
+                        <button id="btnLocate" class="bg-blue-600 text-white p-4 rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-100">
+                            <i class="fas fa-location-crosshairs text-xl"></i>
+                        </button>
                     </div>
+                    <div id="map" class="shadow-inner"></div>
                 </div>
-                
-                <div id="map" class="h-64 rounded-xl overflow-hidden"></div>
             </div>
 
             <!-- Lista de Profissionais -->
-            <div class="lg:w-2/3 grid md:grid-cols-2 gap-6">
-                <!-- Card Profissional 1 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="flex items-start gap-4 mb-4">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Roberto Silva" class="w-16 h-16 rounded-full object-cover">
+            <div class="lg:col-span-2 grid md:grid-cols-2 gap-8">
+                <!-- Profissional 1 -->
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-50 hover:shadow-xl transition-all group">
+                    <div class="flex items-center gap-5 mb-6">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-20 h-20 rounded-2xl object-cover shadow-lg">
                         <div>
-                            <h4 class="font-bold text-lg">Roberto Silva</h4>
-                            <p class="text-sm text-gray-500">Eletricista & Encanador</p>
-                            <div class="text-yellow-400 text-sm mt-1">
-                                <i class="fas fa-star"></i> 4.9 <span class="text-gray-400">(128 avaliações)</span>
+                            <h4 class="font-bold text-xl">Roberto Silva</h4>
+                            <p class="text-blue-600 font-bold text-sm">Eletricista & Encanador</p>
+                            <div class="flex items-center text-yellow-400 text-sm mt-1">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <span class="text-gray-400 ml-2">(128)</span>
                             </div>
                         </div>
-                        <span class="ml-auto bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold">VERIFICADO</span>
                     </div>
-                    <p class="text-gray-600 text-sm mb-4">"Trabalho com agilidade e limpeza. Especialista em troca de fiação e vazamentos."</p>
-                    <div class="flex justify-between items-center border-t pt-4">
-                        <span class="font-bold text-blue-600">A partir de R$ 80</span>
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition">Pedir Orçamento</button>
+                    <p class="text-gray-600 mb-8 leading-relaxed italic">"Especialista em vazamentos e troca de fiação residencial."</p>
+                    <div class="flex justify-between items-center pt-6 border-t border-gray-50">
+                        <span class="text-2xl font-black text-gray-900">R$ 80<span class="text-sm font-normal text-gray-400">/h</span></span>
+                        <button class="bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition shadow-lg">Orçamento</button>
                     </div>
                 </div>
-
-                <!-- Card Profissional 2 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="flex items-start gap-4 mb-4">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Cláudia Mendes" class="w-16 h-16 rounded-full object-cover">
+                <!-- Profissional 2 -->
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-50 hover:shadow-xl transition-all group">
+                    <div class="flex items-center gap-5 mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-20 h-20 rounded-2xl object-cover shadow-lg">
                         <div>
-                            <h4 class="font-bold text-lg">Cláudia Mendes</h4>
-                            <p class="text-sm text-gray-500">Marida de Aluguel</p>
-                            <div class="text-yellow-400 text-sm mt-1">
-                                <i class="fas fa-star"></i> 5.0 <span class="text-gray-400">(84 avaliações)</span>
+                            <h4 class="font-bold text-xl">Cláudia Mendes</h4>
+                            <p class="text-blue-600 font-bold text-sm">Marida de Aluguel</p>
+                            <div class="flex items-center text-yellow-400 text-sm mt-1">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <span class="text-gray-400 ml-2">(84)</span>
                             </div>
                         </div>
-                        <span class="ml-auto bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold">VERIFICADO</span>
                     </div>
-                    <p class="text-gray-600 text-sm mb-4">"Instalação de prateleiras, quadros, cortinas e pequenos reparos gerais."</p>
-                    <div class="flex justify-between items-center border-t pt-4">
-                        <span class="font-bold text-blue-600">A partir de R$ 70</span>
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition">Pedir Orçamento</button>
-                    </div>
-                </div>
-
-                <!-- Card Profissional 3 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="flex items-start gap-4 mb-4">
-                        <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="João Marcos" class="w-16 h-16 rounded-full object-cover">
-                        <div>
-                            <h4 class="font-bold text-lg">João Marcos</h4>
-                            <p class="text-sm text-gray-500">Técnico em Eletrodomésticos</p>
-                            <div class="text-yellow-400 text-sm mt-1">
-                                <i class="fas fa-star"></i> 4.7 <span class="text-gray-400">(210 avaliações)</span>
-                            </div>
-                        </div>
-                        <span class="ml-auto bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold">VERIFICADO</span>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4">"Conserto máquinas de lavar, geladeiras e micro-ondas. Orçamento sem compromisso."</p>
-                    <div class="flex justify-between items-center border-t pt-4">
-                        <span class="font-bold text-blue-600">A partir de R$ 120</span>
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition">Pedir Orçamento</button>
+                    <p class="text-gray-600 mb-8 leading-relaxed italic">"Montagem de móveis e pequenos reparos com agilidade."</p>
+                    <div class="flex justify-between items-center pt-6 border-t border-gray-50">
+                        <span class="text-2xl font-black text-gray-900">R$ 75<span class="text-sm font-normal text-gray-400">/h</span></span>
+                        <button class="bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition shadow-lg">Orçamento</button>
                     </div>
                 </div>
-                
-                 <!-- Ver mais -->
-                 <div class="flex items-center justify-center">
-                    <a href="#" class="text-blue-600 font-bold hover:underline">Ver todos os profissionais próximos <i class="fas fa-arrow-right ml-1"></i></a>
-                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer / Legal -->
-    <footer class="bg-gray-900 text-white py-12 px-4">
-        <div class="container mx-auto grid md:grid-cols-3 gap-8 mb-8 border-b border-gray-800 pb-8">
+    <!-- Chat IA Widget -->
+    <div class="fixed bottom-8 right-8 z-[100]">
+        <button id="ai-trigger" class="ai-float p-5 bg-blue-600 text-white rounded-full shadow-2xl hover:scale-110 transition-all flex items-center gap-4 pr-10 border-4 border-white">
+            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-inner">
+                <i class="fas fa-robot text-3xl"></i>
+            </div>
+            <div class="text-left">
+                <p class="text-xs opacity-80 font-black uppercase tracking-widest">IA Resolve</p>
+                <p class="font-black text-xl">Pergunte à IA</p>
+            </div>
+        </button>
+
+        <div id="ai-chat-panel" class="chat-panel fixed bottom-28 right-8 w-[90vw] md:w-[450px] h-[650px] bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 flex flex-col overflow-hidden">
+            <!-- Header Chat -->
+            <div class="p-8 bg-blue-600 text-white flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-robot text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-lg">Assistente Inteligente</h3>
+                        <div class="flex items-center gap-2 text-xs opacity-80">
+                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Online agora
+                        </div>
+                    </div>
+                </div>
+                <button id="close-chat" class="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 transition flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Mensagens -->
+            <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-6 bg-gray-50/50">
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
+                        <p class="text-sm leading-relaxed text-gray-700">Olá! Eu sou a IA do ResolveAí. Posso te ajudar a diagnosticar problemas domésticos. <b>Me conte o que está acontecendo ou use a câmera para me mostrar!</b></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview da Câmera -->
+            <div id="camera-preview" class="hidden relative h-56 bg-black mx-8 mb-6 rounded-3xl overflow-hidden shadow-2xl">
+                <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
+                <div class="absolute bottom-4 left-0 right-0 flex justify-center">
+                    <button id="capture-photo" class="bg-white text-blue-600 px-6 py-2 rounded-full font-bold shadow-lg hover:bg-blue-50 transition">Analisar Imagem</button>
+                </div>
+                <button id="close-camera" class="absolute top-4 right-4 bg-red-500 text-white w-10 h-10 rounded-full shadow-lg">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-8 bg-white border-t border-gray-100">
+                <div class="flex items-center gap-3">
+                    <button id="btn-camera" title="Usar Câmera" class="w-14 h-14 rounded-2xl bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition flex items-center justify-center text-xl">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <button id="btn-mic" title="Usar Microfone" class="w-14 h-14 rounded-2xl bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition flex items-center justify-center text-xl">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <div class="flex-1 relative">
+                        <input type="text" id="chat-input" placeholder="O que quebrou?..." class="w-full bg-gray-100 border-none rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button id="btn-send" class="w-14 h-14 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition flex items-center justify-center text-xl shadow-lg shadow-blue-200">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-20 px-6">
+        <div class="container mx-auto grid md:grid-cols-3 gap-12 mb-12 border-b border-gray-800 pb-12">
             <div>
-                <h4 class="font-bold text-lg mb-4 text-blue-400">ResolveAí</h4>
-                <p class="text-gray-400 text-sm leading-relaxed">Capacitando você para cuidar do seu lar com autonomia e segurança. Créditos sempre atribuídos aos criadores originais.</p>
+                <h4 class="font-black text-2xl mb-6 text-blue-400">ResolveAí</h4>
+                <p class="text-gray-400 leading-relaxed">Capacitando pessoas para resolverem problemas do cotidiano de forma sustentável e inteligente. Alinhado à ODS 11 da ONU.</p>
             </div>
             <div>
-                <h4 class="font-bold text-lg mb-4">Links Rápidos</h4>
-                <ul class="text-gray-400 text-sm space-y-2">
-                    <li><a href="#" class="hover:text-white">Central de Segurança</a></li>
-                    <li><a href="#" class="hover:text-white">Termos de Responsabilidade</a></li>
-                    <li><a href="#" class="hover:text-white">Seja um Profissional Parceiro</a></li>
+                <h4 class="font-bold text-lg mb-6">Links Rápidos</h4>
+                <ul class="space-y-4 text-gray-400">
+                    <li><a href="#" class="hover:text-white transition">Como funciona</a></li>
+                    <li><a href="#" class="hover:text-white transition">Seja um profissional</a></li>
+                    <li><a href="#" class="hover:text-white transition">Tutoriais</a></li>
+                    <li><a href="#" class="hover:text-white transition">Sobre a FETEPS</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="font-bold text-lg mb-4">Segurança em 1º lugar</h4>
-                <p class="text-xs text-gray-500 italic uppercase tracking-wider mb-2">Atenção!</p>
-                <p class="text-gray-400 text-xs">Sempre desligue a rede elétrica/hidráulica antes de qualquer reparo. Se houver risco estrutural, contrate um especialista no nosso marketplace.</p>
+                <h4 class="font-bold text-lg mb-6">Newsletter</h4>
+                <p class="text-gray-400 mb-4">Receba dicas de manutenção no seu e-mail.</p>
+                <div class="flex gap-2">
+                    <input type="email" placeholder="Seu e-mail" class="bg-gray-800 border-none rounded-xl px-4 py-3 w-full">
+                    <button class="bg-blue-600 px-6 rounded-xl font-bold">OK</button>
+                </div>
             </div>
         </div>
-        <div class="text-center text-gray-500 text-xs">
-            &copy; 2024 ResolveAí - Feito para quem faz.
+        <div class="container mx-auto text-center text-gray-500 text-sm">
+            <p>© 2026 ResolveAí — Projeto Acadêmico FETEPS</p>
         </div>
     </footer>
 
     <script>
-    (function () {
-        var mapEl = document.getElementById('map');
-        if (!mapEl || !window.L) return;
-        var defaultLatLng = { lat: -23.55052, lng: -46.633308 };
-        var map = L.map('map').setView([defaultLatLng.lat, defaultLatLng.lng], 13);
+        // GPS Real com Leaflet
+        var map = L.map('map').setView([-23.5505, -46.6333], 13); // São Paulo default
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19
+            attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-        var userMarker;
-        var proMarkers = [];
-        var pros = [
-            { name: 'Roberto Silva', cat: 'Eletricista & Encanador', price: 80, rating: 4.9 },
-            { name: 'Cláudia Mendes', cat: 'Marida de Aluguel', price: 70, rating: 5.0 },
-            { name: 'João Marcos', cat: 'Téc. Eletrodomésticos', price: 120, rating: 4.7 }
-        ];
-        function addProsAround(latlng) {
-            proMarkers.forEach(function (m) { map.removeLayer(m); });
-            proMarkers = [];
-            var offsets = [
-                { dLat: 0.005, dLng: 0.003 },
-                { dLat: -0.004, dLng: -0.002 },
-                { dLat: 0.002, dLng: -0.004 }
-            ];
-            pros.forEach(function (p, i) {
-                var pos = [latlng.lat + offsets[i].dLat, latlng.lng + offsets[i].dLng];
-                var marker = L.marker(pos).addTo(map);
-                marker.bindPopup(
-                    '<div style="min-width:200px">' +
-                    '<div style="font-weight:700">' + p.name + '</div>' +
-                    '<div style="color:#6b7280;font-size:12px">' + p.cat + '</div>' +
-                    '<div style="margin-top:6px">' +
-                    '<span style="color:#2563eb;font-weight:700">A partir de R$ ' + p.price + '</span>' +
-                    '<span style="color:#f59e0b;font-weight:700;margin-left:8px">' + p.rating + ' ★</span>' +
-                    '</div>' +
-                    '<a href="#profissionais" style="display:inline-block;margin-top:8px;background:#2563eb;color:#fff;padding:6px 10px;border-radius:8px;font-weight:700;text-decoration:none">Pedir Orçamento</a>' +
-                    '</div>'
-                );
-                proMarkers.push(marker);
-            });
+
+        var marker;
+
+        function updateLocation(lat, lng) {
+            if (marker) map.removeLayer(marker);
+            map.setView([lat, lng], 15);
+            marker = L.marker([lat, lng]).addTo(map)
+                .bindPopup('Você está aqui!')
+                .openPopup();
+            
+            // Simular profissionais próximos
+            L.circle([lat, lng], { radius: 500, color: 'blue', opacity: 0.1 }).addTo(map);
         }
-        function setUser(latlng) {
-            if (userMarker) map.removeLayer(userMarker);
-            userMarker = L.marker([latlng.lat, latlng.lng], { title: 'Você está aqui' }).addTo(map);
-            L.circle([latlng.lat, latlng.lng], { radius: 200, color: '#2563eb', fillColor: '#93c5fd', fillOpacity: 0.2 }).addTo(map);
-            map.setView([latlng.lat, latlng.lng], 14);
-            addProsAround(latlng);
+
+        document.getElementById('btnLocate').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    updateLocation(position.coords.latitude, position.coords.longitude);
+                }, function() {
+                    alert("Não foi possível obter sua localização.");
+                });
+            }
+        });
+
+        // CEP Search (Mock)
+        document.getElementById('cepInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                alert("Buscando profissionais para o CEP: " + this.value);
+                updateLocation(-23.5616, -46.6559); // Exemplo Av. Paulista
+            }
+        });
+
+        // Chat IA Logic
+        const trigger = document.getElementById('ai-trigger');
+        const panel = document.getElementById('ai-chat-panel');
+        const closeChat = document.getElementById('close-chat');
+        const btnCamera = document.getElementById('btn-camera');
+        const cameraPreview = document.getElementById('camera-preview');
+        const closeCamera = document.getElementById('close-camera');
+        const video = document.getElementById('video');
+        const chatInput = document.getElementById('chat-input');
+        const btnSend = document.getElementById('btn-send');
+        const messages = document.getElementById('chat-messages');
+
+        trigger.addEventListener('click', () => {
+            panel.classList.add('active');
+            trigger.classList.add('hidden');
+        });
+
+        closeChat.addEventListener('click', () => {
+            panel.classList.remove('active');
+            trigger.classList.remove('hidden');
+        });
+
+        btnCamera.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                cameraPreview.classList.remove('hidden');
+            } catch (err) {
+                alert("Erro ao acessar a câmera: " + err.message);
+            }
+        });
+
+        closeCamera.addEventListener('click', () => {
+            const stream = video.srcObject;
+            if (stream) stream.getTracks().forEach(track => track.stop());
+            cameraPreview.classList.add('hidden');
+        });
+
+        function addMessage(text, isUser = false) {
+            const div = document.createElement('div');
+            div.className = `flex gap-4 ${isUser ? 'flex-row-reverse' : ''}`;
+            div.innerHTML = `
+                <div class="w-10 h-10 ${isUser ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-600'} rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas ${isUser ? 'fa-user' : 'fa-robot'} text-xs"></i>
+                </div>
+                <div class="${isUser ? 'bg-blue-600 text-white' : 'bg-white'} p-5 rounded-2xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} shadow-sm border border-gray-100">
+                    <p class="text-sm leading-relaxed">${text}</p>
+                </div>
+            `;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
         }
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (pos) {
-                setUser({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-            }, function () {
-                setUser(defaultLatLng);
-            }, { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 });
-        } else {
-            setUser(defaultLatLng);
-        }
-        var locateBtn = document.getElementById('btnLocate');
-        if (locateBtn) {
-            locateBtn.addEventListener('click', function () {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (pos) {
-                        setUser({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-                    }, function () {
-                        setUser(defaultLatLng);
-                    }, { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 });
-                }
-            });
-        }
-        var cepInput = document.getElementById('cepInput');
-        if (cepInput) {
-            cepInput.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' && cepInput.value.trim()) {
-                    var q = encodeURIComponent(cepInput.value.trim());
-                    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=' + q, {
-                        headers: { 'Accept-Language': 'pt-BR' }
-                    }).then(function (r) { return r.json(); }).then(function (data) {
-                        if (data && data[0]) {
-                            setUser({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
-                        }
-                    }).catch(function () {});
-                }
-            });
-        }
-    })();
+
+        btnSend.addEventListener('click', async () => {
+            const val = chatInput.value.trim();
+            if (val) {
+                addMessage(val, true);
+                chatInput.value = '';
+                
+                // Simulação de IA Real (Em um projeto real, aqui chamaria uma API)
+                setTimeout(() => {
+                    let response = "Analisando seu pedido... ";
+                    if (val.toLowerCase().includes("torneira")) {
+                        response += "Parece um vazamento no vedante. Recomendo nosso tutorial de 'Troca de Reparo'. Quer que eu abra para você?";
+                    } else if (val.toLowerCase().includes("chuveiro")) {
+                        response += "Cuidado com a rede elétrica! Para trocar o chuveiro, desligue o disjuntor. Temos um guia seguro para isso.";
+                    } else {
+                        response += "Entendi. Poderia me dar mais detalhes ou mostrar uma foto do problema?";
+                    }
+                    addMessage(response);
+                }, 1000);
+            }
+        });
+
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') btnSend.click(); });
     </script>
 </body>
 </html>
